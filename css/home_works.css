@@ -42,7 +42,7 @@
 }
 
 .parent_block {
-    height: 700px;
+    height: 500px;
     width: 700px;
     border: 1px solid var(--orange);
     position: relative;
@@ -202,6 +202,8 @@
     width: 500px;
     justify-content: center;
 }
+
+
 
 .stopwatch {
     padding: 100px 0;

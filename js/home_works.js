@@ -15,13 +15,12 @@ emailButton.onclick = () => {
     }
 }
 
-// hw part 2
+// MOVE BLOCK
 
 const parent_block = document.querySelector('.parent_block');
 const child_block = document.querySelector('.child_block');
 
-let child_pos_x = 0;
-let child_pos_y = 0;
+let child_pos_x = 0, child_pos_y = 0;
 
 const maxX = parent_block.clientWidth - child_block.offsetWidth;
 const maxY = parent_block.clientHeight - child_block.offsetHeight;
@@ -84,3 +83,77 @@ const animate = () => {
 };
 
 animate();
+
+
+// HW 2 - Stopwatch
+
+
+const time = document.querySelector('#seconds');
+const startButton = document.querySelector('#start');
+const pauseButton = document.querySelector('#stop');
+const resetButton = document.querySelector('#reset');
+
+
+let startTime = 0;
+let elapsedTime = 0;
+let intervalId;
+let paused = true;
+
+const pad = (unit, targetLength = 2) => {
+    const unitString = String(unit);
+    return unitString.padStart(targetLength, '0');
+}
+
+const updateTime = () => {
+    elapsedTime = Date.now() - startTime;
+
+    const totalSeconds = Math.floor(elapsedTime / 1000);
+    const hrs = Math.floor(totalSeconds / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+    const millis = elapsedTime % 100;
+
+    renderTime(hrs, mins, secs, millis);
+}
+
+const renderTime = (hrs, mins, secs, millis) => {
+    const formattedHrs = pad(hrs);
+    const formattedMins = pad(mins);
+    const formattedSecs = pad(secs);
+    const formattedMillis = pad(millis);
+
+    time.textContent = `${formattedHrs}:${formattedMins}:${formattedSecs}.${formattedMillis}`;
+
+}
+
+startButton.addEventListener('click', (e) => {
+    if (paused) {
+        paused = false;
+        startTime = Date.now() - elapsedTime;
+        intervalId = setInterval(updateTime, 10);
+    }
+})
+
+pauseButton.addEventListener('click', (e) => {
+    if (!paused) {
+        paused = true;
+        elapsedTime = Date.now() - startTime;
+        clearInterval(intervalId);
+    }
+})
+
+resetButton.addEventListener('click', (e) => {
+    paused = true;
+    clearInterval(intervalId);
+    startTime = 0;
+    elapsedTime = 0;
+
+    renderTime(0, 0, 0, 0);
+})
+
+renderTime(0, 0, 0, 0);
+
+
+
+
+
