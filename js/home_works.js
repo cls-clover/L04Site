@@ -155,5 +155,56 @@ renderTime(0, 0, 0, 0);
 
 
 
+// -------- CHARACTERS ---------
 
+const characters_list = document.querySelector('.characters-list');
 
+const getCharacters = () => {
+    const request = new XMLHttpRequest();
+    request.open('GET', `../data/characters.json`);
+    request.setRequestHeader('Content-type', 'application/json');
+    request.send();
+
+    request.onload = () => {
+        const data = JSON.parse(request.response);
+        createCharacters(data);
+    }
+}
+
+const createCharacters = (characters) => {
+    characters_list.innerHTML = '';
+
+    characters.forEach((character) => {
+        const character_card = document.createElement('div');
+        character_card.classList.add('character-card');
+
+        character_card.innerHTML = `
+        <div class="character-photo">
+            <img src="${character.photo}" alt="${character.name}"></img>
+        </div>
+        <h3>${character.name}</h3>
+        <span><i>alias:</i> ${character.alias}</span>
+        <span><i>gender:</i> ${character.gender}</span>
+    `
+
+        characters_list.append(character_card);
+    })
+}
+
+getCharacters()
+
+// --------- myself ---------
+
+const getMyself = () => {
+    const request = new XMLHttpRequest();
+    request.open('GET', `../data/any.json`);
+    request.setRequestHeader('Content-type', 'application/json');
+    request.send();
+
+    request.onload = () => {
+        const myself = JSON.parse(request.response);
+        console.log(myself);
+    }
+}
+
+getMyself();
