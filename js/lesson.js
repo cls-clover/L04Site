@@ -71,3 +71,56 @@ tabsItemsParent.addEventListener('click', (event) => {
         }
     }
 });
+
+
+
+// Converter
+
+const somInput = document.querySelector('#som')
+const usdInput = document.querySelector('#usd')
+const cnyInput = document.querySelector('#cny')
+
+const converter = (element, targetElements) => {
+    element.oninput = () => {
+        const request = new XMLHttpRequest()
+        request.open('GET', '../data/converter.json')
+        request.setRequestHeader('Content-type', 'application/json')
+        request.send()
+
+        request.onload = () => {
+            const data = JSON.parse(request.response)
+            for (const targetElement of targetElements) {
+                if (element.id === "som") {
+                    if (targetElement.id === "usd") {
+                        targetElement.value = (element.value / data.usd).toFixed(2)
+                    } else if (targetElement.id === "cny") {
+                        targetElement.value = (element.value / data.cny).toFixed(2)
+                    }
+                }
+
+                if (element.id === "usd") {
+                    if (targetElement.id === "som") {
+                        targetElement.value = (element.value * data.usd).toFixed(2)
+                    } else if (targetElement.id === "cny") {
+                        targetElement.value = ((element.value * data.usd) / data.cny).toFixed(2)
+                    }
+                }
+
+                if (element.id === "cny") {
+                    if (targetElement.id === "som") {
+                        targetElement.value = (element.value * data.cny).toFixed(2)
+                    } else if (targetElement.id === "usd") {
+                        targetElement.value = ((element.value * data.cny) / data.usd).toFixed(2)
+                    }
+                }
+
+
+                if (element.value === '') targetElement.value = ''
+            }
+        }
+    }
+}
+
+converter(somInput, [usdInput, cnyInput]);
+converter(usdInput, [somInput, cnyInput]);
+converter(cnyInput, [somInput, usdInput]);
