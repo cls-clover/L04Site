@@ -73,7 +73,6 @@ tabsItemsParent.addEventListener('click', (event) => {
 });
 
 
-
 // Converter
 
 const somInput = document.querySelector('#som')
@@ -124,3 +123,51 @@ const converter = (element, targetElements) => {
 converter(somInput, [usdInput, cnyInput]);
 converter(usdInput, [somInput, cnyInput]);
 converter(cnyInput, [somInput, usdInput]);
+
+
+// card_switcher
+
+const cardBlock = document.querySelector('.card')
+const btnNext = document.querySelector('#btn-next')
+const btnPrev = document.querySelector('#btn-prev')
+let cardId = 1
+
+
+const fetchTodo = (cardId) => {
+    fetch(`https://jsonplaceholder.typicode.com/todos/${cardId}`)
+        .then(res => res.json())
+        .then(data => {
+            const {id, title} = data
+
+            cardBlock.innerHTML = `
+            <p>${title}</p>
+            <p>${id}</p>
+        `
+        })
+}
+
+
+const updateIdForTodo = (btnType) => {
+    if (btnType === 'next') {
+        cardId = cardId === 200 ? 1 : cardId + 1;
+    } else if (btnType === 'prev') {
+        cardId = cardId === 1 ? 200 : cardId - 1;
+    }
+    fetchTodo(cardId)
+}
+
+btnNext.onclick = () => updateIdForTodo('next')
+btnPrev.onclick = () => updateIdForTodo('prev')
+
+fetchTodo(cardId)
+
+
+// https://jsonplaceholder.typicode.com/posts
+
+const fetchPosts = () => {
+    fetch(`https://jsonplaceholder.typicode.com/posts`)
+        .then(res => res.json())
+        .then(data => console.log(data))
+}
+
+fetchPosts()
